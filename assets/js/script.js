@@ -39,6 +39,8 @@ var gameState;
 var myCase;
 var selectedCase;
 
+var data = {};
+
 initialize();
 
 function initialize() {
@@ -48,7 +50,6 @@ function initialize() {
     assignVariables();
     assignCaseAmounts();
     createDealButtons();
-
     selectPlayersCase();
 }
 
@@ -100,14 +101,19 @@ function assignCaseAmounts() {
 }
 
 function createDealButtons() {
-    var dealEl = $("<button>")
-        .attr({ id: "deal-btn", "data-offer": "no" })
-        .text("DEAL");
-    var noDealEl = $("<button>")
-        .attr({ id: "no-deal-btn", "data-offer": "no" })
-        .text("NO DEAL");
-    $("#bankerInfo").append(dealEl, noDealEl);
+    var inputEl = $("<input>").attr({
+        id: "number-input",
+        type: "number",
+        placeholder: "Enter your number"
+    });
+
+    var submitEl = $("<button>")
+        .attr({ id: "submit-btn" })
+        .text("Submit");
+
+    $("#bankerInfo").append(inputEl, submitEl);
 }
+
 
 /* Code for the Actual Game */
 
@@ -137,12 +143,16 @@ function openCase(thisRound) {
         casesOpenedThisRound < numCasesOpenedPerRound[round] &&
         thisRound === round
         ) {
-        selectedCase = $(this);
-        removeSelectedCase(selectedCase);
-        displayInfo();
-        if (casesOpenedThisRound === numCasesOpenedPerRound[round])
-            bankersOffer();
-        else displayInstructions();
+            selectedCase = $(this);
+            removeSelectedCase(selectedCase);
+            displayInfo();
+            if (casesOpenedThisRound === numCasesOpenedPerRound[round]) {
+                playersOffer();
+                //save to data by making a deep copy
+                var deepCopy = JSON.parse(JSON.stringify(moneyValuesRemaining));
+                data[round] = deepCopy;
+            }
+            else displayInstructions();
         }
     });
 }
@@ -158,7 +168,7 @@ function removeSelectedCase(el) {
     updateStatsTable();
 }
 
-function bankersOffer() {
+function playersOffer() {
     gameState = 2;
 
     var mean = bankersOfferMeanSD[round][0];
@@ -169,51 +179,59 @@ function bankersOffer() {
     var ex = calcExpectedValue();
     var pi = z * sd + mean;
 
-    offer = Math.round(0.01 * pi * ex);
+    
+    var cv = sd / ex;
+    var log10ev = Math.log10(ex);
+    //log10bo = 0.195 + 0.991*log10ev - 0.057*cv - 0.037*len(prizes_left)
+    
+    console.log("remaining prizes: " + (totalCases-totalCasesOpened+1));
+    var log10bo = 0.195 + 0.991*log10ev - 0.057*cv - 0.037*(totalCases-totalCasesOpened+1)
+    bo = Math.pow(10, log10bo);
+
+    offer = Math.round(bo);
+    data["bo" + round] = offer;
 
     offerDeal(round);
 }
 
 function offerDeal(thisRound) {
-
     displayOffer(offer);
     displayInstructions();
     displayInfo();
+    $("#bankerInfo").show();
 
-    $("#deal-btn").attr("data-offer", "yes");
-    $("#no-deal-btn").attr("data-offer", "yes");
-
-    $("#deal-btn").click(function () {
+    var submitEl = $("#submit-btn");
+    submitEl.click(function () {
         if (thisRound === round) {
-            $("#deal-btn").attr("data-offer", "no");
-            $("#no-deal-btn").attr("data-offer", "no");
+            var userEnteredNumber = parseFloat($("#number-input").val());
+            if (!isNaN(userEnteredNumber) && userEnteredNumber >= 0) {
+                // Process the user's entered number here
+                data["po" + round] = userEnteredNumber; // player's offer + round #
+                var offerAccepted = userEnteredNumber <= 0.3*offer;
+                if (offerAccepted) {
+                    // Banker accepted the offer
+                    gameState = 11;
+                    winnings = userEnteredNumber;
+                    localStorage.setItem("winnings", winnings);
+                    $(".save-winnings").css("display", "block");
+                    save_game("D");
+                } else {
+                    // Banker declined the offer
 
-            removeOffer();
-            gameState = 11;
-            winnings = offer;
-            localStorage.setItem("winnings", winnings);
-            $(".save-winnings").css("display", "block");
-            displayInfo();
+                    removeOffer();
+                    noDealInfo();
+                    newRound();
+                }
+                $("#number-input").val("");
+            } else {
+                alert("Please enter a valid non-negative number.");
+            }
         }
     });
 
-    $("#no-deal-btn").click(function () {
-        if (thisRound === round) {
-            $("#deal-btn").attr("data-offer", "no");
-            $("#no-deal-btn").attr("data-offer", "no");
-
-            removeOffer();
-            removeInfo();
-            newRound();
-        }
-    });
-
-    $("#counter-btn").click(function() {
-        if (thisRound === round) {
-            
-        }
-    });
 }
+
+
 
 function selectFinalCase(thisRound) {
     displayInstructions();
@@ -222,9 +240,9 @@ function selectFinalCase(thisRound) {
             hasSelectedFinalCase = true;
             selectedCase = $(this);
             winnings = parseFloat(selectedCase.val());
-            localStorage.setItem("winnings", winnings);
+            console.log("executing js line 243")
+            save_game("ND");
             $(".save-winnings").css("display", "block");
-            displayInfo();
         }
     });
 }
@@ -289,34 +307,36 @@ function removeOffer() {
 
 function displayInstructions() {
     var instructEl = $("#instructionsDisplayed");
+    var roundHeader = $("#round-header"); // New line to get the round header element
+  
     switch (gameState) {
-        case 0:
+      case 0:
         instructEl.text("Select your case");
         break;
-        case 1:
+      case 1:
         if (numCasesOpenedPerRound[round] - casesOpenedThisRound > 1)
-            instructEl.text(
-            "Open " +
-                (numCasesOpenedPerRound[round] - casesOpenedThisRound) +
-                " cases."
-            );
+          instructEl.text(
+            "Open " + (numCasesOpenedPerRound[round] - casesOpenedThisRound) + " cases."
+          );
         else
-            instructEl.text(
-            "Open " +
-                (numCasesOpenedPerRound[round] - casesOpenedThisRound) +
-                " case."
-            );
+          instructEl.text(
+            "Open " + (numCasesOpenedPerRound[round] - casesOpenedThisRound) + " case."
+          );
         break;
-        case 2:
-        instructEl.text("DEAL or NO DEAL?");
+      case 2:
+        instructEl.text("Enter your offer.");
         break;
-        case 10:
+      case 10:
         instructEl.text("Select your Final Case to take Home");
         break;
     }
-}
+  
+    // Update the round header with the current round number
+    roundHeader.text("Round " + round);
+  }
+  
 
-function displayInfo() {
+function displayInfo(game_id) {
 
     var infoEl = $("#infoDisplayed");
     switch (gameState) {
@@ -327,16 +347,17 @@ function displayInfo() {
             infoEl.html("You opened Case " + selectedCase.text() + "<br>Value: $" + formatNumber(selectedCase.val()));
             break;
         case 10:
-            infoEl.html("Your Final Case is Case " + selectedCase.text() + "<br>Winnings: $" + formatNumber(selectedCase.val()));
+            console.log("player chose final case. gameid: " + game_id)
+            infoEl.html("Your Final Case is Case " + selectedCase.text() + "<br>Winnings: $" + formatNumber(selectedCase.val())  + "<br>Game ID: " + game_id);
             break;
         case 11:
-            infoEl.html("You made a DEAL with the Banker.<br>Winnings: $" + formatNumber(winnings));
+            infoEl.html("The banker accepted your offer.<br>Winnings: $" + formatNumber(winnings) + "<br>Game ID: " + game_id);
     }
 }
 
-function removeInfo() {
+function noDealInfo() {
     var infoEl = $("#infoDisplayed");
-    infoEl.html("");
+    infoEl.html("The banker declined your offer.");
 }
 
 function strikeOutTable(amount) {
@@ -437,8 +458,48 @@ function percentile_z(p) {
     return z;
 }
 
-/* Reset */
+// external request stuff
 
-$("#reset").click(function () {
-    reset();
-});
+
+function save_game(result) {
+    data["result"] = result;
+    data["end_round"] = round;
+    data["winnings"] = winnings;
+    var needNewID = true;
+    ids = getIDs();
+    while (needNewID) {
+        var game_id = "G" + Math.floor(Math.random() * 90000 + 10000);
+        if (!(ids.includes(game_id))) { // id not already used
+            needNewID = false;
+        }
+    }
+    data["game_id"] = game_id;
+    displayInfo(game_id);
+    save_ext(data);
+}
+
+
+function save_ext(data) {
+    console.log("saving data:");
+    console.log(data);
+    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/save_player', { // REPLACE WITH PYTHON URL
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Process the response data (if needed)
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+function getIDs() {
+    return [];
+}
+
