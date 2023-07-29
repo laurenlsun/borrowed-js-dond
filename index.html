@@ -23,50 +23,29 @@
     <header>
       <nav>
         <div class="nav-wrapper">
-          <button class="introBtn left" id="introBtn">
-            <a href="intro.html" class="introTxt">Introduction</a>
-          </button>
           <a href="index.html" class="brand-logo center" id="gameTitle"
             >Deal or No Deal</a
           >
-          <button class="signout-btn-game left" onclick="onSignOut();">
-            Sign Out
-          </button>
-          <div class="col l12 center">
-            <button
-              id="add-music"
-              type="submit"
-              class="fas fa-search right"
-            ></button>
-            <input class="music-input right" type="text" id="music-input" />
-            <button class="stop-btn right" id="stopBtn">
-              <i class="fas fa-stop icon-stop" id="icon"></i>
-            </button>
-            <button class="resume-btn right" id="resumeBtn">
-              <i class="fas fa-play icon-resume" id="icon"></i>
-            </button>
-            <button class="pause-btn right" id="pauseBtn">
-              <i class="fas fa-pause-circle icon-pause" id="icon"></i>
-            </button>
-          </div>
+          
         </div>
       </nav>
     </header>
 
-    <a href="" id="reset">Reset</a>
     <div class="container">
       <div class="row center">
+        <div class="col s12">
+          <h2 id="round-header"></h2>
+        </div>
         <div class="col s12 m4 l2">
-          <div class="row bankerInfo" id="bankerInfo">Banker's Offer<br /></div>
-          <div class="row stats">Percent of Expected</div>
+          <div class="row bankerInfo" id="bankerInfo">Your Offer<br /></div>
           <div class="row yourCase">
             <div>Your Case</div>
             <div id="your-case" class="card case unchosen-case"></div>
           </div>
           <div class="row">
-            <div class="col s12 m4 l12 center" id="stats-table">
+            <!-- <div class="col s12 m4 l12 center" id="stats-table">
               <button id="stats-btn">More Stats</button>
-            </div>
+            </div> -->
             <div class="col s12 m4 l12 center" id="stats-table-values">
               <div class="row" id="expected-value">Expected Value:</div>
               <div class="row" id="standard-deviation">Standard Deviation:</div>
@@ -74,6 +53,7 @@
               <div class="row" id="first-quartile">First Quartile:</div>
               <div class="row" id="third-quartile">Third Quartile:</div>
             </div>
+            <p>Note: Zoom out to fit all the cases on the screen (ctrl -)</p>
           </div>
         </div>
         <div class="col s12 m8 l6 deep-orange" id="gameCasesEl">
@@ -118,21 +98,6 @@
             <br />
             <div id="infoDisplayed"></div>
             <br />
-            <input
-              class="save-winnings"
-              id="name"
-              placeholder="Name"
-              style="display: none;"
-            />
-            <button
-              class="save-winnings"
-              style="display: none;"
-              value="save"
-              id="saveWinnings"
-              onclick="writeData();"
-            >
-              Save Winnings
-            </button>
           </div>
         </div>
         <div class="col s12 m4 l4 center" id="moneyAmountTable">
