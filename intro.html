@@ -24,32 +24,10 @@
       <!--NavBar begins-->
       <nav>
         <div class="nav-wrapper">
-          <button class="introBtn left" id="introBtn">
-            <a href="intro.html" class="introTxt">Introduction</a>
-          </button>
           <a href="index.html" class="brand-logo center" id="gameTitle"
             >Deal or No Deal</a
           >
-          <button class="signout-btn-game left" onclick="onSignOut();">
-            Sign Out
           </button>
-          <div class="col l12 center">
-            <button
-              id="add-music"
-              type="submit"
-              class="fas fa-search right"
-            ></button>
-            <input class="music-input right" type="text" id="music-input" />
-            <button class="stop-btn right" id="stopBtn">
-              <i class="fas fa-stop icon-stop" id="icon"></i>
-            </button>
-            <button class="resume-btn right" id="resumeBtn">
-              <i class="fas fa-play-circle icon-resume" id="icon"></i>
-            </button>
-            <button class="pause-btn right" id="pauseBtn">
-              <i class="fas fa-pause-circle icon-pause" id="icon"></i>
-            </button>
-          </div>
         </div>
       </nav>
     </header>
@@ -61,53 +39,46 @@
             Game Instructions
           </h2>
           <ul>
-            <p>
-              Before Playing
-            </p>
-            <li>
-              1. If you would like to store your highscore please log in using
-              your Google credentials. If not you may continue as a guest. To
-              listen to music you can search an artist and a playlist will begin
-              playing. The pause, resume, and stop buttons are available if
-              needed.
-            </li>
-            <li>
-              2. Once you have logged in or continued as a guest you will be
-              redirected to the game.
-            </li>
             <p>Game Rules</p>
             <li>
               1. Choose your initial case. This case will remain with you until
               the end of the game.
             </li>
             <li>
-              2. After choosing your case you will choose and eliminate 6 cases.
+              2. After choosing your case, you will choose and eliminate 6 cases. 
+              Opening and eliminating a case eliminates the possibility of 
+              winning that prize.
             </li>
             <li>
-              3. The banker will then call you with an offer to buy your case,
-              our game will display the expected value of the offer (color
-              coded) including other statistics such as mean,standard deviation,
-              etc.
+              3. Based on the remaining possible prizes, you will then have to 
+              make an offer to the banker in the top left box.
             </li>
             <li>
-              4. You can then choose to accept the banker's offer by clicking on
-              the Deal button, or you can reject it by clicking the No Deal
-              button.
+              4. The banker will decide whether to accept or reject your offer.
             </li>
             <li>
-              5. If you select the Deal button, you accept his offer and the
-              game ends. If you select No Deal, the game continues and rounds
-              will proceed.
+              5. If he accepts the offer, the game ends and you will win the 
+              amount you have offered. If he rejects your offer, the game 
+              continues and rounds will proceed; you must continue eliminating 
+              cases from the board.
             </li>
             <li>
               6. Once there is 1 case left, you will have the option of choosing
-              your case or the final case in the game.
+              your case or the final case in the game. Click on the case of your 
+              choice.
             </li>
             <li>
-              7. After making your decision the case you have chosen will open
-              and display your winnings. Once the game has ended, you will have
-              the option to input your name & click the button save winnings to
-              save your highscore! Please make sure to Sign Out.
+              7. After making your decision, the case you have chosen will open
+              and display your winnings, and the game will end.
+            </li>
+            <li>
+              8. After the game has ended, a Game ID will be displayed at the 
+              bottom. You will need to enter this into the Qualtrics form.
+            </li>
+            <li>
+              9. Once you have been given the Game ID, you can safely close out 
+              of this Deal or No Deal tab or click the back button so that you 
+              can return to the Qualtrics form and submit it. 
             </li>
           </ul>
         </div>
@@ -115,15 +86,14 @@
       <!--Row that displays sign in and guest btns-->
       <div class="row">
         <div class="col l12 center">
-          <button class="signin-btn" onclick="onSignIn();">Sign In</button>
           <button
             class="guest-btn"
             onclick="window.location.href
             ='index.html';"
           >
-            Guest
-          </button>
-          <button onclick="save_game({'test': 1, 'rc': [1,2,3]});">Save Game</button>
+            Start Game
+          <!-- </button>
+          <button onclick="save_game({'test': 1, 'rc': [1,2,3]});">Save Game</button> -->
         </div>
       </div>
     </div>
