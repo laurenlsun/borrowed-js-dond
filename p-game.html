@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Game: Deal or No Deal</title>
+    <title>Deal or No Deal</title>
     <!--CSS Links-->
     <link
       rel="stylesheet"
@@ -16,16 +16,17 @@
       integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
 
   <body>
     <header>
       <nav>
         <div class="nav-wrapper">
-          <a class="brand-logo center" id="gameTitle"
-            >Deal or No Deal
-          </a\>
+          <a href="index.html" class="brand-logo center" id="gameTitle"
+            >Deal or No Deal</a
+          >
+          <p class="mode">Player's Offer version</p>
         </div>
       </nav>
     </header>
@@ -97,7 +98,7 @@
             <br />
             <div id="infoDisplayed"></div>
             <br />
-            <button id="continue-btn" style="display: none;">Continue to Game 2</button>
+            <button id="continue-btn" style="display: none;">Continue</button>
           </div>
         </div>
         <div class="col s12 m4 l4 center" id="moneyAmountTable">
@@ -115,6 +116,6 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-database.js"></script>
-    <script src="./assets/js/p-game.js"></script>
+    <script src="assets/js/p-game.js"></script>
   </body>
 </html>
