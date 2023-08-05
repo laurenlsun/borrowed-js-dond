@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusion</title>
+</head>
+
+<body>
+    <h1>Conclusion</h1>
+    <p>This concludes the two games of Deal or No Deal.</p>
+    <div class="game_id">Game ID 1: <span id="first_game_id"></span></div>
+    <div class="game_id">Game ID 2: <span id="second_game_id"></span></div>
+
+    <script>
+        // Get the first_game_id and second_game_id from local storage
+        var firstGameID = localStorage.getItem("first_game_id");
+        var secondGameID = localStorage.getItem("second_game_id");
+
+        // Update the content of the spans with the retrieved game IDs
+        document.getElementById("first_game_id").textContent = firstGameID;
+        document.getElementById("second_game_id").textContent = secondGameID;
+    </script>
+</body>
+
+</html>
