@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    <title>Introduction: Deal or No Deal</title>
+    <title>Player's Offer Instructions</title>
     <!--CSS Links-->
     <link
       rel="stylesheet"
@@ -36,7 +36,7 @@
       <div class="row instructionsEl">
         <div class="col l12 instructions-bg" id="instructions-bg">
           <h2>
-            Game Instructions
+            Game Instructions for BANKER'S OFFER VERSION
           </h2>
           <ul>
             <p>Game Rules</p>
@@ -55,6 +55,7 @@
             </li>
             <li>
               4. The banker will decide whether to accept or reject your offer.
+              He will reject it if your offer is too high.
             </li>
             <li>
               5. If he accepts the offer, the game ends and you will win the 
@@ -89,12 +90,13 @@
           <button
             class="guest-btn"
             onclick="window.location.href
-            ='b-game.html';">
+            ='b-game.html';"
+          >
             Start Game
-          </button>
+          <!-- </button>
+          <button onclick="save_game({'test': 1, 'rc': [1,2,3]});">Save Game</button> -->
         </div>
       </div>
     </div>
-    <!--Javascript Links-->
   </body>
 </html>
