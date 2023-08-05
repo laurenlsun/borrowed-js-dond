@@ -461,20 +461,34 @@ function percentile_z(p) {
 // external request stuff
 
 
+
+
 function save_game(result) {
     data["result"] = result;
     data["end_round"] = round;
     data["winnings"] = winnings;
     var needNewID = true;
-    ids = getIDs();
-    while (needNewID) {
+    while (needNewID) { 
         var game_id = "G" + Math.floor(Math.random() * 90000 + 10000);
-        if (!(ids.includes(game_id))) { // id not already used
+        if (needNewIDCheck(game_id) === 'true') { // need new id
+            console.log("neednewid=true")
+        }
+        else { // neednewidcheck returned false
+            console.log("neednewid=false")
             needNewID = false;
         }
     }
     data["game_id"] = game_id;
     displayInfo(game_id);
+    if (localStorage.getItem("first_mode")==="p") {
+        localStorage.setItem("first_game_id", game_id);
+        data["first_game"] = true;
+    }
+    else {
+        localStorage.setItem("second_game_id", game_id);
+        data["first_game"] = false;
+    }
+    showContinueButton();
     save_ext(data);
 }
 
@@ -482,7 +496,7 @@ function save_game(result) {
 function save_ext(data) {
     console.log("saving data:");
     console.log(data);
-    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/save_player', { // REPLACE WITH PYTHON URL
+    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/save_player', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -499,7 +513,33 @@ function save_ext(data) {
     });
 }
 
-function getIDs() {
-    return [];
+function needNewIDCheck(id) {  // TODO
+    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/check_ids', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(id),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+    console.log(data['result']);
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+    return data['result']; // true or false string. TRUE IF USED BEFORE
 }
 
+function showContinueButton() {
+    var continueBtn = document.getElementById("continue-btn");
+    continueBtn.style.display = "block";
+    continueBtn.addEventListener("click", function() {
+      if (localStorage.getItem("first_mode") === "b") {
+        window.location.href = "end.html";
+      }
+      else {
+        window.location.href = "b-intro.html";
+      }
+    });
+  }
