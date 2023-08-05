@@ -101,17 +101,14 @@ function assignCaseAmounts() {
 }
 
 function createDealButtons() {
-    var inputEl = $("<input>").attr({
-        id: "number-input",
-        type: "number",
-        placeholder: "Enter your number"
-    });
-
-    var submitEl = $("<button>")
-        .attr({ id: "submit-btn" })
-        .text("Submit");
-
-    $("#bankerInfo").append(inputEl, submitEl);
+    var dealEl = $("<button>")
+        .attr({ id: "deal-btn", "data-offer": "no" })
+        .text("DEAL");
+    var noDealEl = $("<button>")
+        .attr({ id: "no-deal-btn", "data-offer": "no" })
+        .text("NO DEAL");
+    $("#bankerInfo").append(dealEl, noDealEl);
+    console.log("buttons created")
 }
 
 
@@ -199,33 +196,41 @@ function offerDeal(thisRound) {
     displayInstructions();
     displayInfo();
     $("#bankerInfo").show();
+    console.log("bankerinfo displayed")
+    $("#deal-btn").attr("data-offer", "yes");
+    $("#no-deal-btn").attr("data-offer", "yes");
 
-    var submitEl = $("#submit-btn");
-    submitEl.click(function () {
+    $("#deal-btn").click(function () {
         if (thisRound === round) {
-            var userEnteredNumber = parseFloat($("#number-input").val());
-            if (!isNaN(userEnteredNumber) && userEnteredNumber >= 0) {
-                // Process the user's entered number here
-                data["po" + round] = userEnteredNumber; // player's offer + round #
-                var offerAccepted = userEnteredNumber <= 0.3*offer;
-                if (offerAccepted) {
-                    // Banker accepted the offer
-                    gameState = 11;
-                    winnings = userEnteredNumber;
-                    localStorage.setItem("winnings", winnings);
-                    $(".save-winnings").css("display", "block");
-                    save_game("D");
-                } else {
-                    // Banker declined the offer
+            $("#deal-btn").attr("data-offer", "no");
+            $("#no-deal-btn").attr("data-offer", "no");
 
-                    removeOffer();
-                    noDealInfo();
-                    newRound();
-                }
-                $("#number-input").val("");
-            } else {
-                alert("Please enter a valid non-negative number.");
+            removeOffer();
+            gameState = 11;
+            winnings = offer;
+            if (localStorage.getItem("first_mode") === "b") { // playing this first
+                localStorage.setItem("first_winnings", winnings);
             }
+            else {
+                localStorage.setItem("")
+            }
+            localStorage.setItem("winnings", winnings);
+            $(".save-winnings").css("display", "block");
+            save_game("D");
+            
+        }
+    });
+
+    $("#no-deal-btn").click(function () {
+        if (thisRound === round) {
+            $("#deal-btn").attr("data-offer", "no");
+            $("#no-deal-btn").attr("data-offer", "no");
+
+            removeOffer();
+            removeInfo();
+            newRound();
+            var infoEl = $("#infoDisplayed");
+            infoEl.html("You chose No Deal.");
         }
     });
 
@@ -324,7 +329,7 @@ function displayInstructions() {
           );
         break;
       case 2:
-        instructEl.text("Enter your offer.");
+        instructEl.text("Deal or No Deal?");
         break;
       case 10:
         instructEl.text("Select your Final Case to take Home");
@@ -333,8 +338,12 @@ function displayInstructions() {
   
     // Update the round header with the current round number
     roundHeader.text("Round " + round);
-  }
+}
   
+function removeInfo() {
+    var infoEl = $("#infoDisplayed");
+    infoEl.html("");
+}
 
 function displayInfo(game_id) {
 
@@ -347,17 +356,16 @@ function displayInfo(game_id) {
             infoEl.html("You opened Case " + selectedCase.text() + "<br>Value: $" + formatNumber(selectedCase.val()));
             break;
         case 10:
-            console.log("player chose final case. gameid: " + game_id)
             infoEl.html("Your Final Case is Case " + selectedCase.text() + "<br>Winnings: $" + formatNumber(selectedCase.val())  + "<br>Game ID: " + game_id);
             break;
         case 11:
-            infoEl.html("The banker accepted your offer.<br>Winnings: $" + formatNumber(winnings) + "<br>Game ID: " + game_id);
+            infoEl.html("You accepted the banker's offer.<br>Winnings: $" + formatNumber(winnings) + "<br>Game ID: " + game_id);
     }
 }
 
 function noDealInfo() {
     var infoEl = $("#infoDisplayed");
-    infoEl.html("The banker declined your offer.");
+    infoEl.html("You declined the offer.");
 }
 
 function strikeOutTable(amount) {
@@ -466,15 +474,27 @@ function save_game(result) {
     data["end_round"] = round;
     data["winnings"] = winnings;
     var needNewID = true;
-    ids = getIDs();
-    while (needNewID) {
+    while (needNewID) { 
         var game_id = "G" + Math.floor(Math.random() * 90000 + 10000);
-        if (!(ids.includes(game_id))) { // id not already used
+        if (needNewIDCheck(game_id) === 'true') { // need new id
+            console.log("neednewid=true")
+        }
+        else { // neednewidcheck returned false
+            console.log("neednewid=false")
             needNewID = false;
         }
     }
     data["game_id"] = game_id;
     displayInfo(game_id);
+    if (localStorage.getItem("first_mode")==="b") {
+        localStorage.setItem("first_game_id", game_id);
+        data["first_game"] = true;
+    }
+    else {
+        localStorage.setItem("second_game_id", game_id);
+        data["first_game"] = false;
+    }
+    showContinueButton();
     save_ext(data);
 }
 
@@ -482,7 +502,7 @@ function save_game(result) {
 function save_ext(data) {
     console.log("saving data:");
     console.log(data);
-    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/save_player', { // REPLACE WITH PYTHON URL
+    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/save_player', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -499,7 +519,33 @@ function save_ext(data) {
     });
 }
 
-function getIDs() {
-    return [];
+function needNewIDCheck(id) {  // TODO
+    fetch('https://aqueous-rarity-393504.ue.r.appspot.com/check_ids', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(id),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+    console.log(data['result']);
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+    return data['result']; // true or false string. TRUE IF USED BEFORE
 }
 
+function showContinueButton() {
+    var continueBtn = document.getElementById("continue-btn");
+    continueBtn.style.display = "block";
+    continueBtn.addEventListener("click", function() {
+      if (localStorage.getItem("first_mode") === "p") {
+        window.location.href = "end.html";
+      }
+      else {
+        window.location.href = "p-intro.html";
+      }
+    });
+  }
