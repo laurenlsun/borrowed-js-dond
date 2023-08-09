@@ -5,7 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
+    <title>Player's Offer Instructions</title><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
     <title>Player's Offer Instructions</title>
+    <!--CSS Links-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <!--NavBar begins-->
+      <nav>
+        <div class="nav-wrapper">
+          <a href="index.html" class="brand-logo center" id="gameTitle"
+            >Deal or No Deal</a
+          >
+          </button>
+        </div>
+      </nav>
+    </header>
+    <!--Container for Instructions-->
+    <div class="container">
+      <div class="row instructionsEl">
+        <div class="col l12 instructions-bg" id="instructions-bg">
+          <h2>
+            Game Instructions for BANKER'S OFFER VERSION
+          </h2>
+          <ul>
+            <p>Game Rules</p>
+            <li>
+              1. Choose your initial case. This case will remain with you until
+              the end of the game.
+            </li>
+            <li>
+              2. After choosing your case, you will choose and eliminate 6 cases. 
+              Opening and eliminating a case eliminates the possibility of 
+              winning that prize.
+            </li>
+            <li>
+              3. Based on the remaining possible prizes, the banker will make you
+              an offer in the top left box.
+            </li>
+            <li>
+              4. You must decide whether to accept or reject his offer.
+            </li>
+            <li>
+              5. If you accpet the offer, the game ends and you will win the 
+              amount he has offered. If you reject his offer, the game 
+              continues and rounds will proceed; you must continue eliminating 
+              cases from the board.
+            </li>
+            <li>
+              6. Once there is 1 case left, you will have the option of choosing
+              your case or the final case in the game. Click on the case of your 
+              choice.
+            </li>
+            <li>
+              7. After making your decision, the case you have chosen will open
+              and display your winnings, and the game will end.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--Row that displays sign in and guest btns-->
+      <div class="row">
+        <div class="col l12 center">
+          <button
+            class="guest-btn"
+            onclick="window.location.href
+            ='b-game.html';"
+          >
+            Start Game
+          <!-- </button>
+          <button onclick="save_game({'test': 1, 'rc': [1,2,3]});">Save Game</button> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
     <!--CSS Links-->
     <link
       rel="stylesheet"
