@@ -1,27 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conclusion</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
-<body>
-    <h1>Conclusion</h1>
-    <p>This concludes the two games of Deal or No Deal.</p>
-    <div class="game_id">Game ID 1: <span id="first_game_id"></span></div>
-    <div class="game_id">Game ID 2: <span id="second_game_id"></span></div>
-
+<body class="game-background">
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="index.html" class="brand-logo center" id="gameTitle">Deal or No Deal</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <p>This concludes the two games of Deal or No Deal.</p>
+        <div class="centered-box">
+            <div class="game_id">Game ID 1: <span id="first_game_id"></span></div>
+            <div class="game_id">Game ID 2: <span id="second_game_id"></span></div>
+        </div>
+        <div class="briefcase-box">
+            <div class="winnings">Winnings 1: $<span id="winnings1"></span></div>
+            <div class="winnings">Winnings 2: $<span id="winnings2"></span></div>
+            <div class="winnings">Total Winnings: $<span id="total_winnings"></span></div>
+        </div>
+    </div>
     <script>
-        // Get the first_game_id and second_game_id from local storage
-        var firstGameID = localStorage.getItem("first_game_id");
-        var secondGameID = localStorage.getItem("second_game_id");
-
-        // Update the content of the spans with the retrieved game IDs
-        document.getElementById("first_game_id").textContent = firstGameID;
-        document.getElementById("second_game_id").textContent = secondGameID;
+        // Get the winnings values from local storage
+        var winnings1 = localStorage.getItem("winnings1");
+        var winnings2 = localStorage.getItem("winnings2");
+        var first_game_id = localStorage.getItem("first_game_id");
+        var second_game_id = localStorage.getItem("second_game_id");
+        
+        // Calculate total winnings
+        var totalWinnings = parseInt(winnings1) + parseInt(winnings2);
+        
+        // Update the content of the spans with the retrieved values
+        document.getElementById("winnings1").textContent = winnings1;
+        document.getElementById("winnings2").textContent = winnings2;
+        document.getElementById("first_game_id").textContent = first_game_id;
+        document.getElementById("second_game_id").textContent = second_game_id;
+        document.getElementById("total_winnings").textContent = totalWinnings;
     </script>
 </body>
-
 </html>
