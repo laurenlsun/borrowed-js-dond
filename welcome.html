@@ -4,12 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deal or No Deal</title>
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <h1>Welcome</h1>
-  <button id="continue-btn">Continue</button>
-
-  <!-- Include the external JavaScript file -->
-  <script src="assets/js/index.js"></script>
+<body class="game-background">
+  <header>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="index.html" class="brand-logo center" id="gameTitle">Deal or No Deal</a>
+      </div>
+    </nav>
+  </header>
+  <div class="container">
+    <p>Today you will play two versions of Deal or No Deal with slightly different rules.
+      The rules will be explained before you begin each game. 
+    </p>
+    <p>Data from each game will be saved to the database using an associated Game ID.
+      The IDs will be displayed at the end of each game and in the conclusion page. 
+      Please save your Game IDs for reference; we will ask you to enter them in our Qualtrics form.
+    </p>
+    <div class="col l12 center">
+    <button id="continue-btn" class="guest-btn">Continue to Game 1</button>
+  </div>
+  </div>
+  <script src="assets/js/welcome.js"></script>
 </body>
 </html>
